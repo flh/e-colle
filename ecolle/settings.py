@@ -124,6 +124,7 @@ INSTALLED_APPS = (
     'colleur',
     'secretariat',
     'customfilter',
+    'devoirs',
 )
 
 MIDDLEWARE_CLASSES = (
