@@ -1,0 +1,53 @@
+{% extends 'administrateur/action.html' %}
+{% load static %}
+{% block body %}
+<table class="accueil"><tr><td>Prochains conseils de classe</td></tr></table>
+<table class="tableausimple" id="suppr">
+  <tr class="entete">
+    <td>Classe</td>
+    <td>Période</td>
+    <td>Date</td>
+    <td>Modifier</td>
+    <td>Supprimer</td>
+  </tr>
+  {% for conseil in prochains_conseils %}
+  <tr>
+    <td>{{ conseil.classe }}</td>
+    <td>{{ conseil.periode }}</td>
+    <td>{{ conseil.date }}</td>
+    <td><a class="bouton" href="{% url 'modif_conseil' conseil.pk %}">Modifier</a></td>
+    <td><a class="bouton" href="{% url 'suppr_conseil' conseil.pk %}">Supprimer</a></td>
+  </tr>
+  {% endfor %}
+</table>
+
+<table class="accueil"><tr><td>Ajouter un conseil de classe</td></tr></table>
+	<form method="post">
+	{% csrf_token %}
+	<table class="tableausimple">
+		{{ form.as_table }}
+		<tr><td colspan="2"><input type="submit"/></td></tr>
+	</table>
+	</form>
+
+<table class="accueil"><tr><td>Anciens conseils de classe</td></tr></table>
+<table class="tableausimple" id="suppr">
+  <tr class="entete">
+    <td>Classe</td>
+    <td>Période</td>
+    <td>Date</td>
+    <td>Modifier</td>
+    <td>Supprimer</td>
+  </tr>
+  {% for conseil in anciens_conseils %}
+  <tr>
+    <td>{{ conseil.classe }}</td>
+    <td>{{ conseil.periode }}</td>
+    <td>{{ conseil.date }}</td>
+    <td><a class="bouton" href="{% url 'modif_conseil' conseil.pk %}">Modifier</a></td>
+    <td><a class="bouton" href="{% url 'suppr_conseil' conseil.pk %}">Supprimer</a></td>
+  </tr>
+  {% endfor %}
+</table>
+
+{% endblock %}
