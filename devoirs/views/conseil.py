@@ -5,8 +5,8 @@ from django.forms import formset_factory
 
 import datetime
 
-from devoirs.models import Periode, Conseil
-from devoirs.forms import PeriodeForm, ConseilForm
+from devoirs.models import Periode, Conseil, Appreciation, Bulletin
+from devoirs.forms import PeriodeForm, ConseilForm, BulletinFormset, BulletinForm
 from administrateur.views import ip_filter
 
 @ip_filter
@@ -84,3 +84,24 @@ def conseil_suppr(request, pk):
     except Exception:
         messages.error(request, "Impossible d'effacer ce conseil de classe")
     return redirect("conseil_liste")
+
+@ip_filter
+def conseil_bulletin(request, pk):
+    bulletin = get_object_or_404(Bulletin, pk=pk)
+    bulletin_qs = Appreciation.objects.filter(bulletin=bulletin)
+    if request.method == "POST":
+        bulletin_formset = BulletinFormset(request.POST, prefix='apprs',
+                queryset=bulletin_qs)
+        form = BulletinForm(request.POST, instance=bulletin, prefix='bulletin')
+        if form.is_valid() and bulletin_formset.is_valid():
+            form.save()
+            bulletin_formset.save()
+            return redirect('conseil_bulletin', pk)
+    else:
+        bulletin_formset = BulletinFormset(prefix='apprs',
+                queryset=bulletin_qs)
+        form = BulletinForm(instance=bulletin, prefix='bulletin')
+    return render(request, "administrateur/bulletin.html", {
+        'appreciations': bulletin_formset,
+        'form' : form,
+        })

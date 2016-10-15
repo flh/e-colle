@@ -1,0 +1,21 @@
+{% extends 'administrateur/action.html' %}
+{% load static %}
+{% block body %}
+<table class="accueil"><tr><td>Bulletin : {{ form.instance.eleve }}</td></tr></table>
+  <form method="post">
+  {% csrf_token %}
+  {{ appreciations.management_form }}
+  <table class="tableausimple">
+    {% for appr in appreciations %}
+    <tr>
+      <td>{{ appr.instance.matiere }}</td>
+      <td>{{ appr.texte }}</td>
+    </tr>
+    {% endfor %}
+    {{ form.as_table }}
+    <tr><td colspan="2"><input type="submit"/></td></tr>
+  </table>
+</form>
+{% endblock %}
+
+
