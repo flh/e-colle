@@ -2,6 +2,8 @@
 from django.db import models
 from django.db.models import CASCADE, PROTECT, SET_NULL
 
+from accueil.models import Eleve
+
 class Periode(models.Model):
     nom = models.CharField(max_length=30)
     debut = models.DateField()
@@ -65,3 +67,31 @@ class Conseil(models.Model):
         ordering = ['-date']
         verbose_name = "conseil de classe"
         verbose_name_plural = "conseils de classe"
+
+    def save(self, *args, **kwargs):
+        super(Conseil, self).save(*args, **kwargs)
+        self.cree_bulletins()
+
+    def cree_bulletins(self):
+        eleves = Eleve.objects.filter(classe=self.classe)
+        for eleve in eleves:
+            try:
+                b = Bulletin(conseil=self, eleve=eleve)
+                b.save()
+            except: #TODO IntegrityError
+                pass
+
+    def cree_appreciation_template(self, prof):
+        profs = accueil.Prof.filter(classe=self.classe)
+        for prof in profs:
+            appr = AppreciationTemplate(conseil=self, professeur=prof,
+                    matiere=prof.matiere, moyenne_auto=True,
+                    debut=self.periode.debut, fin=self.periode.fin)
+            appr.save()
+
+    def cree_appreciations_prof(self, prof):
+        bulletins = Bulletin.objects.filter(conseil=self)
+        tpl = AppreciationTemplate.objects.filter(professeur=prof, conseil=self)
+        for bulletin in bulletins:
+            appr = Appreciation()
+            bulletin.appreciations.add(appr)
