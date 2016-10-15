@@ -20,10 +20,16 @@ class AppreciationTemplate(models.Model):
     conseil = models.ForeignKey('Conseil', on_delete=CASCADE)
     professeur = models.ForeignKey('accueil.Prof', on_delete=CASCADE)
     matiere = models.ForeignKey('accueil.Matiere', on_delete=CASCADE)
-    texte = models.TextField()
-    moyenne = models.DecimalField(max_digits=5, decimal_places=2)
+    moyenne_auto = models.BooleanField(verbose_name="Calcul automatique de la moyenne")
     notes = models.ManyToManyField('DevoirNote')
     colles = models.ManyToManyField('accueil.Note')
+    debut = models.DateField()
+    fin = models.DateField()
+    class Meta:
+        unique_together = ('conseil', 'professeur', 'matiere')
+
+    def __init__(self, *args, **kwargs):
+        pass
 
 class Appreciation(models.Model):
     template = models.ForeignKey('AppreciationTemplate', null=True, on_delete=SET_NULL)

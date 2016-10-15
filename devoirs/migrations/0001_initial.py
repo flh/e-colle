@@ -235,6 +235,25 @@ class Migration(migrations.Migration):
             field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='accueil.Prof'),
         ),
         migrations.AddField(
+            model_name='appreciationtemplate',
+            name='debut',
+            field=models.DateField(),
+        ),
+        migrations.AddField(
+            model_name='appreciationtemplate',
+            name='fin',
+            field=models.DateField(),
+        ),
+        migrations.AddField(
+            model_name='appreciationtemplate',
+            name='moyenne_auto',
+            field=models.BooleanField(),
+        ),
+        migrations.AlterUniqueTogether(
+            name='appreciationtemplate',
+            unique_together=set([('conseil', 'professeur', 'matiere')]),
+        ),
+        migrations.AddField(
             model_name='appreciation',
             name='bulletin',
             field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='devoirs.Bulletin'),
