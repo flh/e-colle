@@ -1,0 +1,13 @@
+{% extends 'colleur/action.html' %}
+{% load static %}
+{% block body %}
+<table class="accueil"><tr><td>Appréciations</td></tr></table>
+  <form method="post">
+  {% csrf_token %}
+  {{ formset.management_form }}
+  <table class="tableausimple">
+    {{ formset.as_table }}
+    <tr><td colspan="2"><input type="submit"/></td></tr>
+  </table>
+</form>
+{% endblock %}

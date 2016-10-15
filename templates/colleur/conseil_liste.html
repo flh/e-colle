@@ -1,0 +1,40 @@
+{% extends 'colleur/action.html' %}
+{% load static %}
+{% block body %}
+<table class="accueil"><tr><td>Prochains conseils de classe</td></tr></table>
+<table class="tableausimple" id="suppr">
+  <tr class="entete">
+    <td>Classe</td>
+    <td>Période</td>
+    <td>Date</td>
+    <td>Devoirs</td>
+    <td>Appréciations</td>
+  </tr>
+  {% for conseil in prochains_conseils %}
+  <tr>
+    <td>{{ conseil.classe }}</td>
+    <td>{{ conseil.periode }}</td>
+    <td>{{ conseil.date }}</td>
+    <td><a class="bouton" href="{% url 'epreuves_conseil' conseil.pk %}">Sélectionner les devoirs</a></td>
+    <td><a class="bouton" href="{% url 'saisies_conseil' conseil.pk %}">Saisir les appréciations</a></td>
+  </tr>
+  {% endfor %}
+</table>
+
+<table class="accueil"><tr><td>Anciens conseils de classe</td></tr></table>
+<table class="tableausimple" id="suppr">
+  <tr class="entete">
+    <td>Classe</td>
+    <td>Période</td>
+    <td>Date</td>
+  </tr>
+  {% for conseil in anciens_conseils %}
+  <tr>
+    <td>{{ conseil.classe }}</td>
+    <td>{{ conseil.periode }}</td>
+    <td>{{ conseil.date }}</td>
+  </tr>
+  {% endfor %}
+</table>
+
+{% endblock %}
